@@ -1,25 +1,48 @@
 /* Formatting function for row details - modify as you need */
 function format ( d ) {
     // `d` is the original data object for the row
+    /* aqui expande os dados na tabela ao clicar */
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
         '<tr>'+
-            '<td>Full name:</td>'+
-            '<td>'+d.name+'</td>'+
+            '<td>Nome completo:</td>'+
+            '<td>'+d.nome+'</td>'+
         '</tr>'+
         '<tr>'+
-            '<td>Extension number:</td>'+
+            '<td>Número da extencao:</td>'+
             '<td>'+d.extn+'</td>'+
         '</tr>'+
         '<tr>'+
-            '<td>Extra info:</td>'+
-            '<td>And any further details here (images etc)...</td>'+
+            '<td>Informações extras:</td>'+
+            '<td>E qualquer detalhe futuro aqui (imagens etc)...</td>'+
         '</tr>'+
     '</table>';
 }
  
 $(document).ready(function() {
     var table = $('#example').DataTable( {
+        /* ajax é onde vai carregar os dados, nesse caso os dados estão vindo de array.js */
         "ajax": "array.json",
+        /* configuração da linguágem datatable para mudar de search para buscar por exemplo */
+        "oLanguage": {
+            "sProcessing":      "Procesando...",
+            "sLengthMenu":      "Mostrando _MENU_ registros por página",
+            "sEmptyTable":      "Nenhum dado disponível na tabela",
+            "sZeroRecords":     "Ops! Nada encontrado.",
+            "sInfo":            "Mostrando de _START_ a _END_ de _TOTAL_ registros",
+            "sInfoEmpty":       "Mostrando de 0 até 0 de 0 records",
+            "sInfoFiltered":    "(filtrado de _MAX_ total de registros)",
+            "sSearch":          "Buscar:",
+            "sUrl":             "",
+            "sInfoThousands":   ",",
+            "sLoadingRecords":  "Cargando...",
+            "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
+            }
+        },
+        /* colunas da tabela que queremos expandir vem lá do array.json */
         "columns": [
             {
                 "className":      'dt-control',
@@ -27,10 +50,10 @@ $(document).ready(function() {
                 "data":           null,
                 "defaultContent": ''
             },
-            { "data": "name" },
-            { "data": "position" },
-            { "data": "office" },
-            { "data": "salary" }
+            { "data": "nome" },
+            { "data": "posicao" },
+            { "data": "escritorio" },
+            { "data": "salario" }
         ],
         "order": [[1, 'asc']]
     } );
