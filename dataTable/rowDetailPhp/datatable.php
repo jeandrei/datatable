@@ -4,6 +4,7 @@
    
   
    // Reading value
+   // Dados do datatable não meche nisso
    $draw = $_POST['draw'];
    $row = $_POST['start'];
    $rowperpage = $_POST['length']; // Rows display per page
@@ -15,34 +16,33 @@
    $searchArray = array();
 
    // Search
+   //Os campos que a query ira buscar no campo buscar do datatable
    $searchQuery = " ";
    if($searchValue != ''){
-      $searchQuery = " AND (email LIKE :email OR 
-           first_name LIKE :first_name OR
-           last_name LIKE :last_name OR 
-           address LIKE :address ) ";
+      $searchQuery = " AND (nome LIKE :nome OR 
+           posicao LIKE :posicao OR
+           salario LIKE :salario ) ";
       $searchArray = array( 
-           'email'=>"%$searchValue%",
-           'first_name'=>"%$searchValue%",
-           'last_name'=>"%$searchValue%",
-           'address'=>"%$searchValue%"
+           'nome'=>"%$searchValue%",
+           'posicao'=>"%$searchValue%",
+           'salario'=>"%$searchValue%"
       );
    }
 
    // Total number of records without filtering
-   $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM employees ");
+   $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM funcionarios ");
    $stmt->execute();
    $records = $stmt->fetch();
    $totalRecords = $records['allcount'];
 
    // Total number of records with filtering
-   $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM employees WHERE 1 ".$searchQuery);
+   $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM funcionarios WHERE 1 ".$searchQuery);
    $stmt->execute($searchArray);
    $records = $stmt->fetch();
    $totalRecordwithFilter = $records['allcount'];
 
    // Fetch records
-   $stmt = $conn->prepare("SELECT * FROM employees WHERE 1 ".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+   $stmt = $conn->prepare("SELECT * FROM funcionarios WHERE 1 ".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
 
    // Bind values
    foreach ($searchArray as $key=>$search) {
@@ -55,13 +55,19 @@
    $empRecords = $stmt->fetchAll();
 
    $data = array();
-
+   
+    /** 
+    * 1 Atualize os campos que serão passados pelo sql e que deseja apresentar na tabela
+    * aqui são todos os campos desejados independentemente se quer apresentar no detalhe ou na tabela principal
+    * depois passe para o arquivo app_ajax
+    */
    foreach ($empRecords as $row) {
       $data[] = array(
-         "email"=>$row['email'],
-         "first_name"=>$row['first_name'],
-         "last_name"=>$row['last_name'],
-         "address"=>$row['address']
+         "nome"=>$row['nome'],
+         "posicao"=>$row['posicao'],
+         "salario"=>$row['salario'],
+         "extn" => $row['extn'],
+         "escritorio"=>$row['escritorio']
       );
    }
 

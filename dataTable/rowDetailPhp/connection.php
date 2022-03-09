@@ -1,7 +1,7 @@
 <?php
 //conexão com o banco de dados
 $host     = 'mysql';
-$db       = 'demos';
+$db       = 'datatable';
 $user     = 'root';
 $password = 'rootadm';
 
